@@ -1,0 +1,101 @@
+<div class="loader" *ngIf="this.loader == 'LOADING'">
+   <img src="loader.gif">
+</div>
+<div class="popup-opaque" *ngIf="this.resultValid == 'ERROR'">
+ <div class="close" (click)="this.resultValid = ''"><img src="close.png"></div>
+   <div class="popup-de">
+      <div><img src = "error.png"></div>
+      <div [textContent]="this.warnErrMsg"></div>
+   </div>
+</div>
+<div class="popup-opaque" *ngIf="this.resultValid == 'WARNING'">
+   <div class="close" (click)="this.resultValid = ''"><img src="close.png"></div>
+   <div class="popup-de">
+      <div><img src="warning.png" ></div>
+      <div [textContent]="this.warnErrMsg"></div>
+   </div>
+</div>
+<div class="popup-opaque" *ngIf="this.resultValid == 'OPENDETAIL'">
+   <div class="user-popup">
+            <div class="close-img" (click)="this.resultValid = ''"><img src="close.png"></div>
+        <div [textContent]="this.userData.name" class="user_name"></div>
+   <table class="table_des">
+      <tr *ngIf="!this.checkguest">
+         <td ><img src="contact.png" class="data-img"></td>
+         <td> : </td>
+         <td [textContent]="this.userData.contact"></td>
+      </tr>
+      <tr>
+         <td ><img src="birthday.png" class="data-img"></td>
+         <td> : </td>
+         <td [textContent]="this.userData.dob"></td>
+      </tr>
+      <tr>
+         <td ><img src="homeTown.png" class="data-img"></td>
+         <td> : </td>
+         <td [textContent]="this.userData.homeTown"></td>
+      </tr>
+      <tr *ngIf="!this.checkguest">
+         <td><img src="currentLocation.png" class="data-img"></td>
+         <td> : </td>
+         <td [textContent]="this.userData.currentLocation"></td>
+      </tr>
+      <tr>
+         <td><img src="comment.png" class="data-img"></td>
+         <td>  </td>
+         <td [textContent]="this.userData.comment"></td>
+      </tr>
+   </table>
+   <table style="width: 100%">
+      <tr>
+         <td style="text-align: center" (click)=openWhatsApp(this.userData.contact); *ngIf="!this.checkguest"><img src="whatsappIcon.png" style="width: 50px;height: 50px;"></td>
+         <td style="text-align: center" (click)=openInsta(this.userData.instaId);><img src="instagram.png" style="width: 50px;height: 50px;"></td>
+      </tr>
+   </table>
+</div>
+   
+</div>
+<div class="home-page">
+    <div class="homeHeader">
+            <div class="img-data" (click)="openProfileImage()"><img id="profile-img" class="img-circle" onerror="this.src='default.png'"></div>
+            <div class="text-wrap">
+               <div>Welcome</div>
+               <div [textContent] = "this.name"></div>
+            </div>
+            <i class="fa fa-sign-out" aria-hidden="true" (click)="logout()"></i>
+      </div>
+      <div class="search-box">
+         <form  action="/action_page.php">
+            <input type="text" placeholder="Search.." name="search2" [(ngModel)] = "searchName">
+         </form>
+      </div>
+      <div class="repeat">
+         <div *ngFor="let item of this.data | filter:searchName" class="user-data col-md-4 col-sm-12" >
+               <div class="img-data" (click)="openImage(item.image)"><img class="img-circle" src="{{item.image}}" onerror="this.src='default.png'"></div>
+               <div (click)="getUserDetails(item.id)" style="display: inline;" >
+                  <div class="user-content" >
+                     <div [textContent] = 'item.name'></div>
+                     <div [textContent] = 'item.id' *ngIf="!this.checkguest"></div>
+                     <div  *ngIf="this.checkguest">*****</div>
+                  </div>
+                  <i class="arrow right"></i>
+               </div>
+         </div>
+      </div>
+      <div class="open-data" *ngIf="this.checkOpen">
+            <div class="close-img" (click)="this.checkOpen=false"><img src="close.png"></div>
+         <img class="img-data" src="{{this.thatImage}}" onerror="this.src='default.png'" (blur)="this.checkOpen=false">
+      </div>
+      <div class="add-comment" (click)="this.resultValid = 'OPENCOMMENT'" *ngIf="!this.checkguest">
+         <img class="img-data" src="comment.png">
+      </div>
+      <div class="popup-opaque" *ngIf="this.resultValid == 'OPENCOMMENT'">
+            <div class="user-popup">
+               <div class="close-img" (click)="this.resultValid = ''"><img src="close.png"></div>
+               <p>Your special message :</p>
+               <textarea maxlength="250" [(ngModel)]="this.userComments" rows="6" style="width: 100%;margin-bottom: 15px;"></textarea>
+               <button class="btn btn-success btn-block" (click)="updateComment()" style="background-color: #949294;border-color: #949294;">Submit</button>
+             </div>
+      </div>
+</div>
+
